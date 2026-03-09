@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админка — Глиняный дом</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Админ-панель</div>
+  <nav class="nav active">
+    <a href="index.html">На сайт</a>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="section-head">
+    <h2>Добавление категории</h2>
+  </div>
+
+  <form id="category-form">
+    <input type="text" id="category-name" placeholder="Название категории" required>
+    <input type="text" id="category-image" placeholder="Ссылка на изображение">
+    <input type="text" id="category-description" placeholder="Описание категории">
+    <button type="submit">Добавить категорию</button>
+  </form>
+
+  <div class="section-head">
+    <h2>Добавление товара</h2>
+  </div>
+
+  <form id="product-form">
+    <input type="text" id="product-name" placeholder="Название товара" required>
+    <input type="text" id="product-description" placeholder="Описание товара" required>
+    <input type="number" id="product-price" placeholder="Цена" required>
+    <input type="text" id="product-image" placeholder="Ссылка на изображение">
+    <select id="product-category" required></select>
+    <label style="display:block;margin-bottom:12px;">
+      <input type="checkbox" id="product-sale"> Товар на распродаже
+    </label>
+    <button type="submit">Добавить товар</button>
+  </form>
+
+  <div class="section-head">
+    <h2>Категории</h2>
+  </div>
+  <div id="categories-list"></div>
+
+  <div class="section-head">
+    <h2>Товары</h2>
+  </div>
+  <div id="products-list"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

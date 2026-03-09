@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>О нас — Глиняный дом</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Глиняный дом</div>
+  <button class="menu-toggle" id="menuToggle">☰</button>
+  <nav class="nav" id="nav">
+  <a href="index.html">Главная</a>
+  <a href="catalog.html">Каталог</a>
+  <a href="sale.html">Распродажа</a>
+
+  <div class="dropdown" id="aboutDropdown">
+    <button class="dropbtn" id="aboutToggle" type="button">
+      О нас <span class="drop-arrow">▾</span>
+    </button>
+
+    <div class="dropdown-content" id="aboutMenu">
+      <a href="masters.html">О мастерах</a>
+      <a href="reviews.html">Отзывы</a>
+    </div>
+  </div>
+
+  <a href="contacts.html">Контакты</a>
+  <a href="cart.html" class="cart-link">Корзина <span id="cart-count">0</span></a>
+</nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="hero-text" id="masters">
+      <h1>О наших мастерах</h1>
+      <p>
+        Над каждым изделием работает мастер, который вручную формирует форму,
+        подбирает фактуру и следит за качеством обжига. Благодаря этому каждая
+        работа получается живой и немного уникальной.
+      </p>
+      <p>
+        Мы не стремимся к бездушной одинаковости — наоборот, ценим характер,
+        ручной труд и естественную красоту керамики.
+      </p>
+    </div>
+
+    <div class="hero-info" id="reviews">
+      <h2>Отзывы покупателей</h2>
+      <p>“Очень тёплые и красивые изделия, вживую выглядят ещё лучше.”</p>
+      <p>“Покупали в подарок — остались довольны и качеством, и упаковкой.”</p>
+      <p>“Приятно, что каждая вещь ощущается сделанной с душой.”</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div>
+    <h3>Глиняный дом</h3>
+    <p>Мастерская керамики ручной работы.</p>
+  </div>
+  <div>
+    <h3>Контакты</h3>
+    <p>Телефон: +996 555 123 456</p>
+    <p>Email: info@glinyanydom.kg</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const el = document.getElementById('cart-count');
+  if (el) el.textContent = cart.length;
+}
+const btn = document.getElementById('menuToggle');
+const nav = document.getElementById('nav');
+if (btn && nav) btn.addEventListener('click', () => nav.classList.toggle('active'));
+updateCartCount();
+</script>
+</body>
+</html>
