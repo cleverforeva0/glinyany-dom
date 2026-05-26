@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>О мастерах — Глиняный дом</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg custom-navbar sticky-top">
+  <div class="container">
+    <a class="navbar-brand custom-logo" href="index.html">Глиняный дом</a>
+
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="index.html">Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="catalog.html">Каталог</a></li>
+        <li class="nav-item"><a class="nav-link" href="sale.html">Распродажа</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">О нас</a>
+          <ul class="dropdown-menu custom-dropdown">
+            <li><a class="dropdown-item" href="masters.html">О мастерах</a></li>
+            <li><a class="dropdown-item" href="reviews.html">Отзывы</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link" href="contacts.html">Контакты</a></li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn cart-btn" href="cart.html">Корзина <span id="cart-count" class="cart-count">0</span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="py-5">
+  <div class="container">
+    <div class="about-note text-center mb-5">
+      <p class="hero-label">Мастерская керамики</p>
+      <h1 class="page-title">Мастера, создающие уют</h1>
+      <p class="page-subtitle mt-2">
+        Наша команда — это люди, влюблённые в глину. Каждое изделие рождается в руках мастера с многолетним опытом.
+      </p>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="about-note text-center h-100">
+          <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=300&h=300&fit=crop&crop=face" class="rounded-circle mb-3" width="120" height="120" alt="Айдана">
+          <h3>Айдана</h3>
+          <p class="small-muted">Гончарный круг, глазуровка, сложные формы. 8 лет практики.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="about-note text-center h-100">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" class="rounded-circle mb-3" width="120" height="120" alt="Темир">
+          <h3>Темир</h3>
+          <p class="small-muted">Ручная лепка, скульптурные элементы. Создаёт посуду и декор.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="about-note text-center h-100">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face" class="rounded-circle mb-3" width="120" height="120" alt="Айжан">
+          <h3>Айжан</h3>
+          <p class="small-muted">Роспись и текстуры. Каждый узор — уникален.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="about-note h-100">
+          <h2>Ручная работа от начала до конца</h2>
+          <p>
+            Мы не используем штамповку и конвейеры. Каждый предмет проходит этапы: замес глины, формовка, сушка, первый обжиг, глазуровка, второй обжиг. 
+            Только после этого изделие попадает к вам.
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-note h-100">
+          <h2>Наша миссия</h2>
+          <p>
+            Возвращать тепло ручного труда в современные дома. Чтобы каждое утро начиналось с керамической кружки, а ужин — с тарелки, в которую мастер вложил душу.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer py-5">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-md-6">
+        <h3>Глиняный дом</h3>
+        <p>Керамика ручной работы для дома и подарков.</p>
+      </div>
+      <div class="col-md-6">
+        <h3>Контакты</h3>
+        <p>Телефон: +996 555 123 456</p>
+        <p>Email: info@glinyanydom.kg</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  document.getElementById('cart-count').textContent = cart.length;
+</script>
+</body>
+</html>
