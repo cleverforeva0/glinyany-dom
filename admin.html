@@ -4,55 +4,165 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Админка — Глиняный дом</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-<header class="header">
-  <div class="logo">Админ-панель</div>
-  <nav class="nav active">
-    <a href="index.html">На сайт</a>
-  </nav>
-</header>
-
-<main class="container">
-  <div class="section-head">
-    <h2>Добавление категории</h2>
+<div class="container admin-shell">
+  <div id="login-view" class="admin-login-wrap">
+    <div class="admin-card">
+      <h1 class="admin-title">Вход в админ-панель</h1>
+      <p class="admin-subtitle">Введите логин и пароль администратора.</p>
+      <div id="login-error" class="error-note"></div>
+      <form id="login-form" class="mt-4">
+        <input type="text" id="admin-login" class="form-control mb-3" placeholder="Логин" required>
+        <input type="password" id="admin-password" class="form-control mb-3" placeholder="Пароль" required>
+        <button type="submit" class="btn custom-btn-dark w-100">Войти</button>
+      </form>
+      <p class="small-muted mt-3 mb-0">Демонстрационный вход для дипломного проекта.</p>
+    </div>
   </div>
 
-  <form id="category-form">
-    <input type="text" id="category-name" placeholder="Название категории" required>
-    <input type="text" id="category-image" placeholder="Ссылка на изображение">
-    <input type="text" id="category-description" placeholder="Описание категории">
-    <button type="submit">Добавить категорию</button>
-  </form>
+  <div id="admin-view" class="admin-hidden">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="admin-title mb-1">Админ-панель</h1>
+        <p class="admin-subtitle">Управление магазином</p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="index.html" class="btn custom-btn-light">На сайт</a>
+        <button id="logout-btn" class="btn custom-btn-dark">Выйти</button>
+      </div>
+    </div>
+    <div id="global-success" class="success-note"></div>
+    <div id="global-error" class="error-note"></div>
 
-  <div class="section-head">
-    <h2>Добавление товара</h2>
+    <!-- Табы -->
+    <div class="d-flex gap-2 mb-3 flex-wrap">
+      <button class="btn tab-btn active" data-tab="manage">Управление</button>
+      <button class="btn tab-btn" data-tab="orders">Заказы</button>
+      <button class="btn tab-btn" data-tab="messages">Сообщения</button>
+      <button class="btn tab-btn" data-tab="reviews">Отзывы</button>
+    </div>
+
+    <!-- Вкладка Управление -->
+    <div id="tab-manage" class="tab-content">
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="admin-card mb-4">
+            <h2 class="admin-section-title">Настройки распродажи</h2>
+            <form id="sale-settings-form">
+              <label class="form-label">Дата и время окончания распродажи</label>
+              <input type="datetime-local" id="sale-end-time" class="form-control mb-3">
+              <button type="submit" class="btn custom-btn-dark">Сохранить</button>
+              <button type="button" id="clear-sale-btn" class="btn custom-btn-light ms-2">Сбросить распродажу</button>
+            </form>
+          </div>
+          <div class="admin-card mb-4">
+            <h2 class="admin-section-title">Добавление категории</h2>
+            <form id="category-form">
+              <input type="text" id="category-name" class="form-control mb-3" placeholder="Название категории" required>
+              <input type="text" id="category-description" class="form-control mb-3" placeholder="Описание категории">
+              <label class="form-label">Фото категории</label>
+              <input type="file" id="category-image-file" class="form-control mb-2" accept="image/*">
+              <input type="text" id="category-image" class="form-control mb-3" placeholder="Ссылка появится автоматически" readonly>
+              <div class="preview-box mb-3" id="category-preview-box">
+                <span id="category-preview-text">Предпросмотр</span>
+                <img id="category-preview-img" alt="Превью категории">
+              </div>
+              <button type="submit" class="btn custom-btn-dark w-100">Добавить категорию</button>
+            </form>
+          </div>
+          <div class="admin-card">
+            <h2 class="admin-section-title">Добавление товара</h2>
+            <form id="product-form">
+              <input type="text" id="product-name" class="form-control mb-3" placeholder="Название товара" required>
+              <input type="text" id="product-description" class="form-control mb-3" placeholder="Описание товара" required>
+              <input type="number" id="product-price" class="form-control mb-3" placeholder="Цена" required>
+              <label class="form-label">Фото товара</label>
+              <input type="file" id="product-image-file" class="form-control mb-2" accept="image/*">
+              <input type="text" id="product-image" class="form-control mb-3" placeholder="Ссылка появится автоматически" readonly>
+              <div class="preview-box mb-3" id="product-preview-box">
+                <span id="product-preview-text">Предпросмотр</span>
+                <img id="product-preview-img" alt="Превью товара">
+              </div>
+              <select id="product-category" class="form-select mb-3" required></select>
+              <button type="submit" class="btn custom-btn-dark w-100">Добавить товар</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="admin-card mb-4">
+            <h2 class="admin-section-title">Категории</h2>
+            <div class="admin-table-wrap" id="categories-list"></div>
+          </div>
+          <div class="admin-card">
+            <h2 class="admin-section-title">Товары</h2>
+            <div class="admin-table-wrap" id="products-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка Заказы -->
+    <div id="tab-orders" class="tab-content admin-hidden">
+      <div class="admin-card">
+        <h2 class="admin-section-title">История заказов</h2>
+        <div class="row g-2 mb-3">
+          <div class="col-md-3">
+            <select id="order-sort" class="form-select">
+              <option value="date_desc">Сначала новые</option>
+              <option value="date_asc">Сначала старые</option>
+              <option value="price_desc">Сначала дорогие</option>
+              <option value="price_asc">Сначала дешёвые</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input type="number" id="order-filter-min" class="form-control" placeholder="Мин. сумма">
+          </div>
+          <div class="col-md-3">
+            <input type="number" id="order-filter-max" class="form-control" placeholder="Макс. сумма">
+          </div>
+          <div class="col-md-3">
+            <button id="apply-order-filter" class="btn custom-btn-dark">Применить</button>
+          </div>
+        </div>
+        <div id="orders-summary" class="mb-3"></div>
+        <div class="admin-table-wrap" id="orders-list"></div>
+      </div>
+    </div>
+
+    <!-- Вкладка Сообщения -->
+    <div id="tab-messages" class="tab-content admin-hidden">
+      <div class="admin-card">
+        <h2 class="admin-section-title">Сообщения</h2>
+        <div class="row g-2 mb-3 align-items-end">
+          <div class="col-md-3">
+            <select id="messages-sort" class="form-select">
+              <option value="date_desc">Сначала новые</option>
+              <option value="date_asc">Сначала старые</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button id="apply-messages-filter" class="btn custom-btn-dark">Применить</button>
+          </div>
+        </div>
+        <div class="admin-table-wrap" id="messages-list"></div>
+      </div>
+    </div>
+
+    <!-- Вкладка Отзывы -->
+    <div id="tab-reviews" class="tab-content admin-hidden">
+      <div class="admin-card">
+        <h2 class="admin-section-title">Отзывы</h2>
+        <div class="admin-table-wrap" id="reviews-admin-list"></div>
+      </div>
+    </div>
   </div>
-
-  <form id="product-form">
-    <input type="text" id="product-name" placeholder="Название товара" required>
-    <input type="text" id="product-description" placeholder="Описание товара" required>
-    <input type="number" id="product-price" placeholder="Цена" required>
-    <input type="text" id="product-image" placeholder="Ссылка на изображение">
-    <select id="product-category" required></select>
-    <label style="display:block;margin-bottom:12px;">
-      <input type="checkbox" id="product-sale"> Товар на распродаже
-    </label>
-    <button type="submit">Добавить товар</button>
-  </form>
-
-  <div class="section-head">
-    <h2>Категории</h2>
-  </div>
-  <div id="categories-list"></div>
-
-  <div class="section-head">
-    <h2>Товары</h2>
-  </div>
-  <div id="products-list"></div>
-</main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin.js"></script>

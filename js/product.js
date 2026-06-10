@@ -30,31 +30,25 @@ async function loadProduct() {
     return;
   }
 
-  const { data, error } = await supabaseClient
-    .from('product')       
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
+  const { data, error } = await supabaseClient.from('product').select('*').eq('id', id).single();
+  if (error || !data) {
     console.error(error);
-    container.innerHTML = `<p>Ошибка загрузки товара</p>`;
+    container.innerHTML = `<p>Товар не найден</p>`;
     return;
   }
 
-  const imageSrc = data.image || data.image_url || 'img/default.jpg';
+  const imageSrc = data.image_url || 'img/default.jpg';
 
   container.innerHTML = `
-    <div class="card">
-      <img src="${imageSrc}" alt="${data.name}">
-      <h3>${data.name}</h3>
-      <p>${data.description || ''}</p>
-      <p class="price">${data.price} сом</p>
-
-      <div class="btn-row">
-        <button id="addBtn">В корзину</button>
-        <a class="btn" href="cart.html">Перейти в корзину</a>
-        <a class="btn secondary" href="index.html">Назад</a>
+    <div class="row g-4 align-items-center">
+      <div class="col-md-6">
+        <img src="${imageSrc}" alt="${data.name}" class="img-fluid rounded-4 product-image" style="background:#f0ebe4;">
+      </div>
+      <div class="col-md-6">
+        <h1 class="mb-3" style="font-family: 'Playfair Display', serif;">${data.name}</h1>
+        <p class="fs-5 mb-4" style="color: #5e4d46;">${data.description || ''}</p>
+        <p class="fs-3 fw-bold mb-4" style="color: #2d201b;">${data.price} сом</p>
+        <button id="addBtn" class="btn custom-btn-dark">В корзину</button>
       </div>
     </div>
   `;
@@ -63,7 +57,7 @@ async function loadProduct() {
     addToCart({
       id: data.id,
       name: data.name,
-      description: data.description,
+      description: data.description || '',
       price: Number(data.price) || 0,
       image: imageSrc
     });

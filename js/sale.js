@@ -10,28 +10,15 @@ function updateCartCount() {
 
 function showToast(message) {
   let toast = document.getElementById('custom-toast');
-
   if (!toast) {
     toast = document.createElement('div');
-    toast.id = 'custom-toast';
-    toast.className = 'custom-toast';
+    toast.id = 'custom-toast'; toast.className = 'custom-toast';
     document.body.appendChild(toast);
   }
-
-  toast.innerHTML = `
-    <div class="custom-toast-icon">✓</div>
-    <div class="custom-toast-content">
-      <div class="custom-toast-title">Товар добавлен в корзину</div>
-      <div class="custom-toast-text">${message}</div>
-    </div>
-  `;
-
+  toast.innerHTML = `<div class="custom-toast-icon">✓</div><div class="custom-toast-content"><div class="custom-toast-title">Товар добавлен в корзину</div><div class="custom-toast-text">${message}</div></div>`;
   toast.classList.add('show');
-
   clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2500);
+  window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function addToCart(item) {
@@ -42,11 +29,65 @@ function addToCart(item) {
   showToast(item.name);
 }
 
-function openProduct(id) {
-  window.location.href = `product.html?id=${id}`;
+function openProduct(id) { window.location.href = `product.html?id=${id}`; }
+
+// Таймер до указанной даты
+let saleEndDate = null;
+
+async function loadSaleEndDate() {
+  const { data, error } = await supabaseClient
+    .from('settings')
+    .select('sale_end_time')
+    .eq('id', 1)
+    .single();
+
+  if (error || !data || !data.sale_end_time) {
+    saleEndDate = null;
+    document.getElementById('sale-timer').textContent = 'Распродажа не активна';
+    return;
+  }
+  saleEndDate = new Date(data.sale_end_time);
+  updateTimer();
+  setInterval(updateTimer, 60000);
+}
+
+function updateTimer() {
+  const timerEl = document.getElementById('sale-timer');
+  if (!timerEl || !saleEndDate) return;
+
+  const now = new Date().getTime();
+  const distance = saleEndDate.getTime() - now;
+
+  if (distance < 0) {
+    timerEl.textContent = 'Акция завершена';
+    // Автоматически снимаем все товары с распродажи (один раз)
+    endSale();
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  timerEl.textContent = `${days}д ${hours}ч ${mins}м`;
+}
+
+async function endSale() {
+  // Снимаем все товары с распродажи
+  await supabaseClient.from('product').update({ is_sale: false, sale_price: null }).neq('id', 0);
+  // Очищаем дату в settings
+  await supabaseClient.from('settings').update({ sale_end_time: null }).eq('id', 1);
+  saleEndDate = null;
+  // Перезагружаем страницу, чтобы отобразился пустой список
+  location.reload();
 }
 
 async function loadSaleProducts() {
+  // Проверяем, не истекла ли уже распродажа
+  if (saleEndDate && new Date() > saleEndDate) {
+    await endSale();
+    return;
+  }
+
   const { data, error } = await supabaseClient
     .from('product')
     .select('*')
@@ -55,81 +96,49 @@ async function loadSaleProducts() {
 
   const container = document.getElementById('sale-products');
   if (!container) return;
-
   container.innerHTML = '';
 
   if (error) {
-    console.error('Ошибка загрузки акционных товаров:', error);
-    container.innerHTML = `
-      <div class="col-12">
-        <div class="about-note text-center">
-          <h2 class="mb-3">Ошибка загрузки</h2>
-          <p class="mb-0">Не удалось получить товары со скидкой.</p>
-        </div>
-      </div>
-    `;
+    container.innerHTML = `<div class="col-12"><div class="about-note text-center"><h2>Ошибка загрузки</h2></div></div>`;
     return;
   }
-
   if (!data || data.length === 0) {
-    container.innerHTML = `
-      <div class="col-12">
-        <div class="about-note text-center">
-          <h2 class="mb-3">Сейчас акционных товаров нет</h2>
-          <p class="mb-4">
-            Этот раздел обновляется не постоянно. Позже здесь появятся изделия
-            по специальной цене.
-          </p>
-          <a href="catalog.html" class="btn custom-btn-dark">Открыть каталог</a>
-        </div>
-      </div>
-    `;
+    container.innerHTML = `<div class="col-12"><div class="about-note text-center"><h2>Сейчас акционных товаров нет</h2><a href="catalog.html" class="btn custom-btn-dark">Открыть каталог</a></div></div>`;
     updateCartCount();
     return;
   }
 
-  data.forEach((p) => {
-    const imageSrc = p.image || p.image_url || 'img/default.jpg';
+  data.forEach(p => {
+    const imageSrc = p.image_url || 'img/default.jpg';
+    const originalPrice = p.price;
+    const salePrice = p.sale_price || originalPrice;
+    const priceHtml = p.sale_price
+      ? `<span class="text-decoration-line-through text-muted me-2">${originalPrice} сом</span><span class="product-price">${salePrice} сом</span>`
+      : `<span class="product-price">${originalPrice} сом</span>`;
 
-    const col = document.createElement('div');
-    col.className = 'col-md-6 col-lg-4';
-
-    const card = document.createElement('div');
-    card.className = 'product-card';
-
+    const col = document.createElement('div'); col.className = 'col-md-6 col-lg-4';
+    const card = document.createElement('div'); card.className = 'product-card';
     card.innerHTML = `
-      <div class="mb-2">
-        <span class="badge rounded-pill text-bg-dark px-3 py-2">Акция</span>
-      </div>
+      <div class="mb-2"><span class="badge rounded-pill text-bg-dark px-3 py-2">Акция</span></div>
       <img src="${imageSrc}" alt="${p.name}">
       <h3>${p.name}</h3>
       <p>${p.description || ''}</p>
-      <p class="product-price">${p.price} сом</p>
+      <div class="mb-2">${priceHtml}</div>
       <div class="d-flex flex-wrap gap-2 mt-3">
-        <button class="btn-add btn">В корзину</button>
-        <button class="btn-more btn">Подробнее</button>
+        <button class="btn btn-add custom-btn-dark">В корзину</button>
+        <button class="btn btn-more custom-btn-light">Подробнее</button>
       </div>
     `;
-
-    card.querySelector('.btn-add').addEventListener('click', () => {
-      addToCart({
-        id: p.id,
-        name: p.name,
-        description: p.description || '',
-        price: Number(p.price) || 0,
-        image: imageSrc
-      });
-    });
-
-    card.querySelector('.btn-more').addEventListener('click', () => {
-      openProduct(p.id);
-    });
-
-    col.appendChild(card);
-    container.appendChild(col);
+    card.querySelector('.btn-add').addEventListener('click', () => addToCart({
+      id: p.id, name: p.name, description: p.description || '', price: Number(salePrice) || 0, image: imageSrc
+    }));
+    card.querySelector('.btn-more').addEventListener('click', () => openProduct(p.id));
+    col.appendChild(card); container.appendChild(col);
   });
-
   updateCartCount();
 }
 
-loadSaleProducts();
+// Запуск
+loadSaleEndDate().then(() => {
+  loadSaleProducts();
+});
